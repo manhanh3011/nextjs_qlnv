@@ -14,7 +14,7 @@ function AddStaff() {
     handleSubmit,
     setError,
     formState: { errors },
-  } = useForm<EmployeeForm>();
+  } = useForm<EmployeeForm>(); 
 
   const onSubmit = async (data: EmployeeForm) => {
     console.log(data);

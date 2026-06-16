@@ -17,6 +17,29 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  postgraphile:
+    image: graphile/postgraphile:latest
+
+    container_name: qlnv-postgraphile
+
+    restart: always
+
+    depends_on:
+      - postgres
+
+    ports:
+      - "5000:5000"
+
+    command:
+      - --connection
+      - postgres://postgres:postgres@postgres:5432/qlnv
+      - --schema
+      - public
+      - --watch
+      - --enhance-graphiql
+      - --port
+      - "5000"
+
   hasura:
     image: hasura/graphql-engine:v2.48.6
 
@@ -38,6 +61,7 @@ services:
       HASURA_GRAPHQL_DEV_MODE: "true"
 
       HASURA_GRAPHQL_ADMIN_SECRET: admin123
+
 
 volumes:
   postgres_data:

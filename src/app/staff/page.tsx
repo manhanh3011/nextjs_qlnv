@@ -17,6 +17,8 @@ function List() {
     async function fetchUsers() {
       const res = await fetch("/api/users");
       const data = await res.json();
+      console.log("data", data);
+      
       setUsers(data);
     }
     fetchUsers();
@@ -74,23 +76,33 @@ function List() {
 
       <div className="bg-white my-3 grid grid-cols-3 rounded-lg shadow-sm">
         <div className="p-2">
-          <button className="w-full rounded-lg p-2 text-left cursor-pointer hover:bg-gray-200">
+          <button onClick={() => setStatusFilter("all")} 
+            className={`w-full rounded-lg p-2 text-left cursor-pointer hover:bg-gray-200 
+                      ${statusFilter === "all" ? "bg-gray-200" : "hover:bg-gray-200"}`}>
             <p className="text-sm text-gray-500">Tất cả</p>
-            <p className="text-sm font-bold">534</p>
+            <p className="text-sm font-bold">{users.length} </p>
           </button>
         </div>
 
         <div className="border-l border-gray-300 p-2">
-          <button className="w-full rounded-lg p-2 text-left cursor-pointer hover:bg-gray-200">
+          <button onClick={() => setStatusFilter("Đang làm việc")}
+            className={`w-full rounded-lg p-2 text-left cursor-pointer hover:bg-gray-200
+                      ${statusFilter === "Đang làm việc" ? "bg-gray-200" : "hover:bg-gray-200"}`}>
             <p className="text-sm text-gray-500">Đang làm việc</p>
-            <p className="text-sm font-bold">482</p>
+            <p className="text-sm font-bold">
+              {users.filter((user) => user.status === "Đang làm việc").length}
+            </p>
           </button>
         </div>
 
         <div className="border-l border-gray-300 p-2">
-          <button className="w-full rounded-lg p-2 text-left cursor-pointer hover:bg-gray-200">
+          <button onClick={() => setStatusFilter("Đã nghỉ việc")}
+            className={`w-full rounded-lg p-2 text-left cursor-pointer hover:bg-gray-200
+                      ${statusFilter === "Đã nghỉ việc" ? "bg-gray-200" : "hover:bg-gray-200"}`}>
             <p className="text-sm text-gray-500">Đã nghỉ việc</p>
-            <p className="text-sm font-bold">52</p>
+            <p className="text-sm font-bold">
+              {users.filter((user) => user.status === "Đã nghỉ việc").length}
+            </p>
           </button>
         </div>
       </div>
