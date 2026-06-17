@@ -29,7 +29,7 @@ module.exports = {
         allowNull: false,
       },
       gender: {
-        type: Sequelize.ENUM("Nam", "Nữ", "Khác"),
+        type: Sequelize.ENUM("MALE", "FEMALE", "OTHER"),
         allowNull: false,
       },
       dateOfBirth: {
@@ -50,12 +50,12 @@ module.exports = {
       },
       level: {
         type: Sequelize.ENUM(
-          "Intern",
-          "Fresher",
-          "Junior",
-          "Middle",
-          "Senior",
-          "Tech Lead",
+          "INTERN",
+          "FRESHER",
+          "JUNIOR",
+          "MIDDLE",
+          "SENIOR",
+          "TECH_LEAD",
         ),
         allowNull: false,
       },
@@ -65,11 +65,11 @@ module.exports = {
       },
       status: {
         type: Sequelize.ENUM(
-          "Đang làm việc",
-          "Đã nghỉ việc",
+          "ACTIVE",
+          "INACTIVE",
         ),
         allowNull: false,
-        defaultValue: "Đang làm việc",
+        defaultValue: "ACTIVE",
       },
       createdAt: {
         type: Sequelize.DATE,

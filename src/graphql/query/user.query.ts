@@ -1,22 +1,29 @@
 export const queryGetUsers = `
-    query GetUsers{
-        users {
-            id
-            employeeId
-            firstName
-            lastName
-            email
-            phone
-            department
-            gender
-            status
-        }
+  query GetUsers {
+    allUsers{
+      nodes{
+        id 
+        employeeId
+        firstName
+        lastName
+        email
+        phone
+        gender
+        dateOfBirth
+        address
+        department
+        role
+        level
+        startDate
+        status
+      }
     }
+  }
 `;
 
 export const queryGetUserById = `
   query GetUserById($id: Int!) {
-    users_by_pk(id: $id) {
+    userById(id: $id) {
       id
       employeeId
       firstName

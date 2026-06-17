@@ -1,5 +1,6 @@
 "use client";
 
+import { GENDER_LABLE, STATUS_LABEL } from "@/src/constants/user";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -8,10 +9,10 @@ function List() {
   const router = useRouter();
 
   const [users, setUsers] = useState<any[]>([]);
-  const [statusFilter, setStatusFilter] = useState<"all" | "Đang làm việc" | "Đã nghỉ việc">("all");
+  const [statusFilter, setStatusFilter] = useState<"ALL" | "ACTIVE" | "INACTIVE">("ALL");
 
   const filterUsers = 
-    statusFilter === "all" ? users : users.filter((user) => user.status == statusFilter);
+    statusFilter === "ALL" ? users : users.filter((user) => user.status == statusFilter);
 
   useEffect(() => {
     async function fetchUsers() {
@@ -76,32 +77,32 @@ function List() {
 
       <div className="bg-white my-3 grid grid-cols-3 rounded-lg shadow-sm">
         <div className="p-2">
-          <button onClick={() => setStatusFilter("all")} 
+          <button onClick={() => setStatusFilter("ALL")} 
             className={`w-full rounded-lg p-2 text-left cursor-pointer hover:bg-gray-200 
-                      ${statusFilter === "all" ? "bg-gray-200" : "hover:bg-gray-200"}`}>
+                      ${statusFilter === "ALL" ? "bg-gray-200" : "hover:bg-gray-200"}`}>
             <p className="text-sm text-gray-500">Tất cả</p>
             <p className="text-sm font-bold">{users.length} </p>
           </button>
         </div>
 
         <div className="border-l border-gray-300 p-2">
-          <button onClick={() => setStatusFilter("Đang làm việc")}
+          <button onClick={() => setStatusFilter("ACTIVE")}
             className={`w-full rounded-lg p-2 text-left cursor-pointer hover:bg-gray-200
-                      ${statusFilter === "Đang làm việc" ? "bg-gray-200" : "hover:bg-gray-200"}`}>
+                      ${statusFilter === "ACTIVE" ? "bg-gray-200" : "hover:bg-gray-200"}`}>
             <p className="text-sm text-gray-500">Đang làm việc</p>
             <p className="text-sm font-bold">
-              {users.filter((user) => user.status === "Đang làm việc").length}
+              {users.filter((user) => user.status === "ACTIVE").length}
             </p>
           </button>
         </div>
 
         <div className="border-l border-gray-300 p-2">
-          <button onClick={() => setStatusFilter("Đã nghỉ việc")}
+          <button onClick={() => setStatusFilter("INACTIVE")}
             className={`w-full rounded-lg p-2 text-left cursor-pointer hover:bg-gray-200
-                      ${statusFilter === "Đã nghỉ việc" ? "bg-gray-200" : "hover:bg-gray-200"}`}>
+                      ${statusFilter === "INACTIVE" ? "bg-gray-200" : "hover:bg-gray-200"}`}>
             <p className="text-sm text-gray-500">Đã nghỉ việc</p>
             <p className="text-sm font-bold">
-              {users.filter((user) => user.status === "Đã nghỉ việc").length}
+              {users.filter((user) => user.status === "INACTIVE").length}
             </p>
           </button>
         </div>
@@ -162,16 +163,18 @@ function List() {
                 <td className="px-4 py-2">{el.employeeId} </td>
                 <td className="px-4 py-2">{el.email} </td>
                 <td className="px-4 py-2">{el.phone} </td>
-                <td className="px-4 py-2">{el.gender} </td>
+                <td className="px-4 py-2">
+                  {GENDER_LABLE[el.gender]}
+                </td>
                 <td className="px-4 py-2">{el.department} </td>
                 <td className="px-4 py-2">
                   <span
-                    className={`px-2 py-1 rounded-full ${el.status === "Đang làm việc" ? "bg-green-200 text-green-700" : "bg-red-200 text-red-700"}`}
+                    className={`px-2 py-1 rounded-full ${el.status === "ACTIVE" ? "bg-green-200 text-green-700" : "bg-red-200 text-red-700"}`}
                   >
                     <i
-                      className={`fa-solid mr-1 ${el.status === "Đang làm việc" ? "fa-circle-check text-green-500" : "fa-circle-xmark text-red-500"}`}
+                      className={`fa-solid mr-1 ${el.status === "ACTIVE" ? "fa-circle-check text-green-500" : "fa-circle-xmark text-red-500"}`}
                     ></i>
-                    {el.status}
+                    {STATUS_LABEL[el.status]}
                   </span>
                 </td>
               </tr>

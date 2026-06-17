@@ -7,11 +7,20 @@ export async function getUsers() {
 };
 
 export async function createUser(data: any) {
-    return callApi(mutationCreateUser, data);
+    return callApi(mutationCreateUser, {
+      input: {
+        user: data,
+      }
+    });
 }
 
-export async function updateUser(data: any) {
-    return callApi(mutationUpdateUser, data);
+export async function updateUser(id: number, data: any) {
+    return callApi(mutationUpdateUser, {
+      input: {
+        id,
+        userPatch: data,
+      }
+    });
 }
 
 export async function getUserById(id: number) {
@@ -19,6 +28,10 @@ export async function getUserById(id: number) {
 }
 
 export async function deleteUser(id: number) {
-  return callApi(mutationDeleteUser, { id });
+  return callApi(mutationDeleteUser, { 
+    input: {
+      id,
+    }  
+  });
 }
 

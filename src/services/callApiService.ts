@@ -1,5 +1,4 @@
-const HASURA_URL = "http://localhost:8080/v1/graphql";
-const HASURA_SECRET = "admin123";
+const GRAPHQL_URL = "http://localhost:5000/graphql";
 
 export async function callApi(query: string, variables?: Record<string, any>) {
   console.log({
@@ -7,11 +6,10 @@ export async function callApi(query: string, variables?: Record<string, any>) {
     variables,
   });
 
-  const response = await fetch(HASURA_URL, {
+  const response = await fetch(GRAPHQL_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "x-hasura-admin-secret": HASURA_SECRET,
     },
     body: JSON.stringify({
       query,

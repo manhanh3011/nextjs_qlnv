@@ -198,9 +198,9 @@ function EditStaff() {
                 Giới tính
               </label>
               <select className="border border-gray-600 text-gray-600 rounded-md w-full h-8 text-xs px-2 outline-none">
-                <option value="Nam">Nam</option>
-                <option value="Nữ">Nữ</option>
-                <option value="Khác">Khác</option>
+                <option value="MALE">Nam</option>
+                <option value="FEMALE">Nữ</option>
+                <option value="OTHER">Khác</option>
               </select>
             </div>
 
@@ -258,13 +258,12 @@ function EditStaff() {
                 className={`text-gray-600 text-xs ${fieldClass(!!errors.level)}`}
               >
                 <option value="">Vui lòng chọn</option>
-                <option value="Intern">Intern</option>
-                <option value="Fresher">Fresher</option>
-                <option value="Junior">Junior</option>
-                <option value="Middle">Middle</option>
-                <option value="Senior">Senior</option>
-                <option value="Team Leader">Team Leader</option>
-                <option value="Director">Director</option>
+                <option value="INTERN">Intern</option>
+                <option value="FRESHER">Fresher</option>
+                <option value="JUNIOR">Junior</option>
+                <option value="MIDDLE">Middle</option>
+                <option value="SENIOR">Senior</option>
+                <option value="TECH_LEAD">Team Leader</option>
               </select>
               {errors.level && (
                 <p className="text-red-500 text-sm">{errors.level?.message} </p>
@@ -347,8 +346,8 @@ function EditStaff() {
                 className={`text-gray-600 text-xs ${fieldClass(!!errors.status)}`}
               >
                 <option value="">Lựa chọn</option>
-                <option value="Đang làm việc">Đang làm việc</option>
-                <option value="Đã nghỉ việc">Đã nghỉ việc</option>
+                <option value="ACTIVE">Đang làm việc</option>
+                <option value="INACTIVE">Đã nghỉ việc</option>
               </select>
               {errors.status && (
                 <p className="text-red-500 text-sm">
@@ -387,7 +386,8 @@ function EditStaff() {
               <label htmlFor="role" className="text-sm text-gray-600">
                 Vai trò
               </label>
-              <select className="border border-gray-600 text-gray-600 rounded-md w-full h-8 text-xs px-2 outline-none">
+              <select {...register("role")}
+                className="border border-gray-600 text-gray-600 rounded-md w-full h-8 text-xs px-2 outline-none">
                 <option value="">Vui lòng chọn</option>
                 <option value="Trưởng phòng">Trưởng phòng</option>
                 <option value="Nhân viên">Nhân viên</option>

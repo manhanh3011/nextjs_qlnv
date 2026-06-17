@@ -31,7 +31,7 @@ function AddStaff() {
       role: data.role,
       level: data.level,
       startDate: data.startDate,
-      status: "Đang làm việc"
+      status: "ACTIVE"
     };
     
     const response = await fetch("/api/users", {
@@ -43,12 +43,10 @@ function AddStaff() {
     });
 
     const result = await response.json();
-    console.log("response.ok", response.ok);
     console.log("result", result);
 
     if (!response.ok) {
       if(result.message === "EMPLOYEE_ID_EXISTS"){
-        console.log("SET EMPLOYEE ERROR");
         setError("employeeId", {
           type: "manual",
           message: "Mã nhân viên đã tồn tại",
@@ -176,9 +174,9 @@ function AddStaff() {
                 required: "Giới tính là bắt buộc"
               })} 
               className="border border-gray-600 text-gray-600 rounded-md w-full h-8 text-xs px-2 outline-none">
-                <option value="Nam">Nam</option>
-                <option value="Nữ">Nữ</option>
-                <option value="Khác">Khác</option>
+                <option value="MALE">Nam</option>
+                <option value="FEMALE">Nữ</option>
+                <option value="OTHER">Khác</option>
               </select>
             </div>
 
@@ -236,12 +234,12 @@ function AddStaff() {
                 className={`text-gray-600 text-xs ${fieldClass(!!errors.level)}`}
               >
                 <option value="">Vui lòng chọn</option>
-                <option value="Intern">Intern</option>
-                <option value="Fresher">Fresher</option>
-                <option value="Junior">Junior</option>
-                <option value="Middle">Middle</option>
-                <option value="Senior">Senior</option>
-                <option value="Tech Lead">Tech Lead</option>
+                <option value="INTERN">Intern</option>
+                <option value="FRESHER">Fresher</option>
+                <option value="JUNIOR">Junior</option>
+                <option value="MIDDLE">Middle</option>
+                <option value="SENIOR">Senior</option>
+                <option value="TECH_LEAD">Tech Lead</option>
               </select>
               {errors.level && (
                 <p className="text-red-500 text-sm">{errors.level?.message} </p>

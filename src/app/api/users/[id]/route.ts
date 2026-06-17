@@ -10,7 +10,7 @@ export async function GET(
 
     const data = await getUserById(Number(id));
 
-    return NextResponse.json(data.users_by_pk);
+    return NextResponse.json(data.userById);
   } catch (error) {
     return NextResponse.json(
       {
@@ -30,12 +30,9 @@ export async function PUT(
 
     const { id } = await params;
 
-    const data = await updateUser({
-      ...body,
-      id: Number(id),
-    });
+    const data = await updateUser(Number(id), body);
 
-    return NextResponse.json(data.update_users_by_pk);
+    return NextResponse.json(data.updateUserById.user);
   } catch (error) {
     return NextResponse.json(
       {
@@ -56,7 +53,7 @@ export async function DELETE(
 
     const data = await deleteUser(Number(id));
 
-    return NextResponse.json(data.delete_users_by_pk);
+    return NextResponse.json(data.deleteUserById.user);
   } catch (error) {
     return NextResponse.json(
       {
