@@ -1,5 +1,6 @@
-import { deleteUser, getUserById, updateUser } from "@/src/services/userSevice";
 import { NextResponse } from "next/server";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function GET(
   req: Request,
@@ -8,9 +9,17 @@ export async function GET(
   try {
     const { id } = await params;
 
-    const data = await getUserById(Number(id));
+    const res = await fetch(`${API_URL}/users/${id}`, {
+      cache: "no-store",
+    });
 
-    return NextResponse.json(data.userById);
+    const data = await res.json();
+
+    if (!res.ok) {
+      return NextResponse.json(data, { status: res.status });
+    }
+
+    return NextResponse.json(data.userById ?? data);
   } catch (error) {
     return NextResponse.json(
       {
@@ -30,9 +39,21 @@ export async function PUT(
 
     const { id } = await params;
 
-    const data = await updateUser(Number(id), body);
+    const res = await fetch(`${API_URL}/users/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
 
-    return NextResponse.json(data.updateUserById.user);
+    const data = await res.json();
+
+    if (!res.ok) {
+      return NextResponse.json(data, { status: res.status });
+    }
+
+    return NextResponse.json(data.updateUserById?.user ?? data);
   } catch (error) {
     return NextResponse.json(
       {
@@ -51,7 +72,18 @@ export async function DELETE(
   try {
     const { id } = await params;
 
-    const data = await deleteUser(Number(id));
+    const res = await fetch(`${API_URL}/users/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      return NextResponse.json(data, { status: res.status });
+    }
 
     return NextResponse.json(data.deleteUserById.user);
   } catch (error) {

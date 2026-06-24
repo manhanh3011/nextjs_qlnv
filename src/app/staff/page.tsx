@@ -8,22 +8,35 @@ import toast from "react-hot-toast";
 function List() {
   const router = useRouter();
 
+  const [currentPage, setCurrentPage] = useState(1);
   const [users, setUsers] = useState<any[]>([]);
-  const [statusFilter, setStatusFilter] = useState<"ALL" | "ACTIVE" | "INACTIVE">("ALL");
+  const [totalPages, setTotalPages] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [statusFilter, setStatusFilter] = useState<
+    "ALL" | "ACTIVE" | "INACTIVE"
+  >("ALL");
 
-  const filterUsers = 
-    statusFilter === "ALL" ? users : users.filter((user) => user.status == statusFilter);
+  const itemPerPage = 10;
+
+  const filterUsers =
+    statusFilter === "ALL"
+      ? users
+      : users.filter((user) => user.status == statusFilter);
 
   useEffect(() => {
     async function fetchUsers() {
-      const res = await fetch("/api/users");
-      const data = await res.json();
-      console.log("data", data);
-      
-      setUsers(data);
+      const res = await fetch(
+        `/api/users?page=${currentPage}&limit=${itemPerPage}`,
+      );
+      const result = await res.json();
+      console.log("data", result);
+
+      setUsers(result.data);
+      setTotalPages(result.pagination.totalPages);
+      setTotal(result.pagination.total);
     }
     fetchUsers();
-  }, [])
+  }, [currentPage]);
 
   const handleDelete = async (id: number) => {
     const confirmed = confirm("Bạn có chắc muốn xóa nhân viên này không?");
@@ -77,18 +90,22 @@ function List() {
 
       <div className="bg-white my-3 grid grid-cols-3 rounded-lg shadow-sm">
         <div className="p-2">
-          <button onClick={() => setStatusFilter("ALL")} 
+          <button
+            onClick={() => setStatusFilter("ALL")}
             className={`w-full rounded-lg p-2 text-left cursor-pointer hover:bg-gray-200 
-                      ${statusFilter === "ALL" ? "bg-gray-200" : "hover:bg-gray-200"}`}>
+                      ${statusFilter === "ALL" ? "bg-gray-200" : "hover:bg-gray-200"}`}
+          >
             <p className="text-sm text-gray-500">Tất cả</p>
             <p className="text-sm font-bold">{users.length} </p>
           </button>
         </div>
 
         <div className="border-l border-gray-300 p-2">
-          <button onClick={() => setStatusFilter("ACTIVE")}
+          <button
+            onClick={() => setStatusFilter("ACTIVE")}
             className={`w-full rounded-lg p-2 text-left cursor-pointer hover:bg-gray-200
-                      ${statusFilter === "ACTIVE" ? "bg-gray-200" : "hover:bg-gray-200"}`}>
+                      ${statusFilter === "ACTIVE" ? "bg-gray-200" : "hover:bg-gray-200"}`}
+          >
             <p className="text-sm text-gray-500">Đang làm việc</p>
             <p className="text-sm font-bold">
               {users.filter((user) => user.status === "ACTIVE").length}
@@ -97,9 +114,11 @@ function List() {
         </div>
 
         <div className="border-l border-gray-300 p-2">
-          <button onClick={() => setStatusFilter("INACTIVE")}
+          <button
+            onClick={() => setStatusFilter("INACTIVE")}
             className={`w-full rounded-lg p-2 text-left cursor-pointer hover:bg-gray-200
-                      ${statusFilter === "INACTIVE" ? "bg-gray-200" : "hover:bg-gray-200"}`}>
+                      ${statusFilter === "INACTIVE" ? "bg-gray-200" : "hover:bg-gray-200"}`}
+          >
             <p className="text-sm text-gray-500">Đã nghỉ việc</p>
             <p className="text-sm font-bold">
               {users.filter((user) => user.status === "INACTIVE").length}
@@ -163,9 +182,7 @@ function List() {
                 <td className="px-4 py-2">{el.employeeId} </td>
                 <td className="px-4 py-2">{el.email} </td>
                 <td className="px-4 py-2">{el.phone} </td>
-                <td className="px-4 py-2">
-                  {GENDER_LABLE[el.gender]}
-                </td>
+                <td className="px-4 py-2">{GENDER_LABLE[el.gender]}</td>
                 <td className="px-4 py-2">{el.department} </td>
                 <td className="px-4 py-2">
                   <span
@@ -182,29 +199,35 @@ function List() {
           </tbody>
         </table>
         <div className="flex items-center justify-end border-t border-gray-200 px-5 py-1 text-xs">
-          <button className="rounded-md border border-gray-300 px-2 py-1 mr-1 text-gray-500 hover:bg-gray-100">
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            className="rounded-md border border-gray-300 px-2 py-1 mr-1 text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
             Trước
           </button>
 
-          <button className="rounded-md bg-black px-2 py-1 text-white mr-1">
-            1
-          </button>
+          {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+            (page) => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`rounded-md border border-gray-300 px-2 py-1 mr-1 hover:bg-gray-100 ${
+                  currentPage === page ? "bg-black text-white" : ""
+                }`}
+              >
+                {page}
+              </button>
+            ),
+          )}
 
-          <button className="rounded-md border border-gray-300 px-2 py-1 mr-1 hover:bg-gray-100">
-            2
-          </button>
-
-          <button className="rounded-md border border-gray-300 px-2 py-1 hover:bg-gray-100">
-            3
-          </button>
-
-          <span className="px-2 text-gray-400">...</span>
-
-          <button className="rounded-md border border-gray-300 px-2 py-1 mr-1 hover:bg-gray-100">
-            50
-          </button>
-
-          <button className="rounded-md border border-gray-300 px-2 py-1 hover:bg-gray-100">
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            }
+            className="rounded-md border border-gray-300 px-2 py-1 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
             Sau
           </button>
         </div>
