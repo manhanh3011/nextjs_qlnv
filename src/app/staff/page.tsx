@@ -1,5 +1,6 @@
 "use client";
 
+import UploadEmployeeModal from "@/src/components/UploadEmployeeModal";
 import { GENDER_LABLE, STATUS_LABEL } from "@/src/constants/user";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -14,7 +15,8 @@ function List() {
   const [total, setTotal] = useState(0);
   const [statusFilter, setStatusFilter] = useState<
     "ALL" | "ACTIVE" | "INACTIVE"
-  >("ALL");
+    >("ALL");
+  const [openMoal, setOpenModal] = useState(false);
 
   const itemPerPage = 10;
 
@@ -65,14 +67,25 @@ function List() {
       <div className="flex justify-between items-center ">
         <h1 className="text-xl font-bold">Danh sách nhân viên</h1>
         <div className="flex">
-          <button className="bg-olive-300 hover:bg-olive-400 rounded-md p-1 text-xs">
+          <button onClick={() => setOpenModal(true)}
+            className="bg-olive-300 hover:bg-olive-400 rounded-md p-1 text-xs">
             Tải lên
           </button>
+
+          <UploadEmployeeModal isOpen={openMoal} onClose={() => setOpenModal(false)} />
+          
           <button
             onClick={() => router.push("/staff/add")}
             className="bg-black hover:bg-gray-500 text-white rounded-md p-1 text-xs ml-1"
           >
             Thêm mới
+          </button>
+
+          <button
+            onClick={() => router.push("/import/history")}
+            className="bg-black hover:bg-gray-500 text-white rounded-md p-1 text-xs ml-1"
+          >
+            Lịch sử tải lên
           </button>
         </div>
       </div>
